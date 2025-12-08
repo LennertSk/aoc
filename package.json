@@ -1,10 +1,11 @@
 {
+  "type": "module",
   "scripts": {
-    "test": "node --test src/index.test.ts",
+    "test": "tsx --test src/index.test.ts",
     "test:bun": "bun test src/index.test.ts",
-    "start": "node src/index.ts",
+    "start": "tsx src/index.ts",
     "start:bun": "bun src/index.ts",
-    "start:dev": "node --watch src/index.ts",
+    "start:dev": "tsx --watch src/index.ts",
     "start:dev:bun": "bun --watch src/index.ts",
     "init-day": "bun src/scripts/initNewDay/initNewDay.ts",
     "lint": "biome lint src",
@@ -15,7 +16,8 @@
     "check:fix": "biome check --write src"
   },
   "devDependencies": {
-    "@types/node": "^24.10.1"
+    "@types/node": "^24.10.1",
+    "tsx": "^4.21.0"
   },
   "dependencies": {
     "typescript": "^5.9.3"
