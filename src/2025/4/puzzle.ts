@@ -55,11 +55,14 @@ const second = (input: string) => {
     function countIsolatedToiletPaper(grid: Array<Array<string>>): { count: number, grid: Array<Array<string>> } {
         const y = grid.length;
         const x = grid[0].length;
-        let amountOfToiletPaper = 0;
+        let amountOfFindableToiletPaper = 0;
+        let replacedGrid: Array<Array<string>> = grid.map(row => row.map(cell => cell));
+
         for (let rowIdx = 0; rowIdx < y; rowIdx++) {
             for (let colIdx = 0; colIdx < x; colIdx++) {
-                if (grid[rowIdx][colIdx] === "@") {
-                    let neighborCount = 0;
+                if (mutableGrid[rowIdx][colIdx] === "@") {
+                    let amountOfToiletPaper = 0;
+    
                     const positions = [
                         [rowIdx - 1, colIdx - 1],
                         [rowIdx - 1, colIdx],
@@ -70,6 +73,7 @@ const second = (input: string) => {
                         [rowIdx + 1, colIdx],
                         [rowIdx + 1, colIdx + 1],
                     ];
+    
                     for (const [nRow, nCol] of positions) {
                         if (
                             nRow < 0 || nRow >= y ||
@@ -77,21 +81,25 @@ const second = (input: string) => {
                         ) {
                             continue;
                         }
-                        if (grid[nRow][nCol] === "@") {
-                            neighborCount++;
+                        if (mutableGrid[nRow][nCol] === "@") {
+                            amountOfToiletPaper++;
                         }
                     }
-                    // Only count if there are fewer than 4 adjacent @
-                    if (neighborCount < 4) {
-                        amountOfToiletPaper++;
+    
+                    // Place an "x" if there are more than 3 "@" in the 8 positions around
+                    if (amountOfToiletPaper < 4) {
+                        amountOfFindableToiletPaper++;
+                    // replacedGrid[rowIdx][colIdx] = "x";
                     }
                 }
             }
         }
-        return { count: amountOfToiletPaper, grid };
+        return { count: amountOfFindableToiletPaper, grid: replacedGrid };
     }
 
     const { count: amountOfToiletPaper, grid: finalGrid } = countIsolatedToiletPaper(mutableGrid);
+
+    console.log(finalGrid[0].join(""));
     return amountOfToiletPaper;
 };
 
