@@ -20,22 +20,34 @@ const first = (input: string) => {
 };
 
 const second = (input: string) => {
-    const availableIngredients = input.trim().split('\n');
+    const ranges = input
+        .trim()
+        .split('\n')
+        .map(line => {
+            const [start, end] = line.split('-').map(Number);
+            return [start, end] as [number, number];
+        });
 
-    let freshRanges: number[] = [];
+    // Sort ranges by start
+    ranges.sort((a, b) => a[0] - b[0]);
 
-    availableIngredients.forEach(range => {
-        const [start, end] = range.split('-').map(Number);
-
-        for (let i = start; i <= end; i++) {
-            if (!freshRanges.includes(i)) {
-                freshRanges.push(i);
-            }
+    let merged: [number, number][] = [];
+    for (const [start, end] of ranges) {
+        if (!merged.length || start > merged[merged.length - 1][1] + 1) {
+            merged.push([start, end]);
+        } else {
+            merged[merged.length - 1][1] = Math.max(merged[merged.length - 1][1], end);
         }
-    });
+    }
 
-    console.log(freshRanges);
-    return freshRanges.length;
+    // Calculate unique ingredient count from merged ranges
+    let total = 0;
+    for (const [start, end] of merged) {
+        total += end - start + 1;
+    }
+
+    // console.log(merged); // for debugging if desired
+    return total;
 };
 
 export { first, second };
